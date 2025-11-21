@@ -1,74 +1,194 @@
-# Repogenesis - Open Innovation Track
+# React Authentication App with Supabase
 
-Welcome to the **Open Innovation Track** of Repogenesis!  
-This repository acts as the **foundation** for all projects submitted under the Open Innovation domain.
+A React authentication application with login, registration, and protected routes using Supabase as the backend.
 
-Participants will **fork this repository**, create a folder with their **team name**, and build their project within it.
+## Features
 
-## What Is Open Innovation?
+- ✅ User Registration
+- ✅ User Login with attempt limits (3 max attempts)
+- ✅ Protected Routes
+- ✅ Session Management
+- ✅ Logout Functionality
+- ✅ Easy-to-modify UI (all styles in one CSS file)
 
-Open Innovation is a broad, creativity-driven track where teams are encouraged to build **anything impactful, useful, or innovative**, including but not limited to:
+## Prerequisites
 
-- Productivity tools
-- Education platforms
-- Developer utilities
-- Creative AI apps
-- Visualization tools
-- Social impact projects
-- Automation scripts
-- Mini games
-- Web/mobile apps
-- Anything experimental or futuristic
+Before you begin, make sure you have:
+- Node.js (v16 or higher) installed
+- A Supabase account (free tier works fine)
 
-You are free to use **any tech stack** and explore **any idea**.
+## Setup Instructions
 
-## Repository Structure
+### 1. Create a Supabase Project
+
+1. Go to [https://supabase.com](https://supabase.com) and sign up/login
+2. Click "New Project"
+3. Fill in your project details:
+   - Project name
+   - Database password (save this!)
+   - Region (choose closest to you)
+4. Wait for the project to be created (takes ~2 minutes)
+
+### 2. Get Your Supabase Credentials
+
+1. In your Supabase project dashboard, go to **Settings** (gear icon in sidebar)
+2. Click on **API** in the settings menu
+3. You'll see:
+   - **Project URL** - looks like `https://xxxxxxxxxxxxx.supabase.co`
+   - **anon/public key** - a long string starting with `eyJ...`
+
+### 3. Configure Environment Variables
+
+1. In your project folder, copy the `.env.example` file to create `.env`:
+   ```
+   Copy-Item .env.example .env
+   ```
+
+2. Open the `.env` file and add your Supabase credentials:
+   ```
+   VITE_SUPABASE_URL=https://your-project-id.supabase.co
+   VITE_SUPABASE_ANON_KEY=your-anon-key-here
+   ```
+
+   **IMPORTANT:** Replace the placeholder values with your actual Supabase URL and anon key from step 2.
+
+### 4. Configure Supabase Authentication (Optional)
+
+By default, Supabase requires email confirmation. To change this:
+
+1. In your Supabase dashboard, go to **Authentication** → **Settings**
+2. Under "Email Auth", you can:
+   - Enable/disable "Confirm email"
+   - Customize email templates
+   - Set redirect URLs
+
+For development, you might want to disable email confirmation.
+
+### 5. Install Dependencies
+
+Open your terminal in the project folder and run:
+
+```powershell
+npm install
+```
+
+### 6. Run the Application
+
+Start the development server:
+
+```powershell
+npm run dev
+```
+
+The app will open in your browser at `http://localhost:3000`
+
+## Project Structure
 
 ```
-open-innovation/
-│
-├── starter/ # Optional sample starter code / folder structure
-├── docs/ # Guides, idea prompts, resources
-│ ├── problem-prompts.md
-│ ├── recommended-tools.md
-│ └── datasets.md
-│
-└── README.md
+BMSCE/
+├── src/
+│   ├── components/
+│   │   ├── Login.jsx          # Login page with attempt limits
+│   │   ├── Register.jsx       # Registration page
+│   │   ├── Dashboard.jsx      # Protected dashboard
+│   │   └── ProtectedRoute.jsx # Route protection wrapper
+│   ├── context/
+│   │   └── AuthContext.jsx    # Authentication state management
+│   ├── lib/
+│   │   └── supabaseClient.js  # Supabase client configuration
+│   ├── App.jsx                # Main app with routing
+│   ├── App.css                # All styles (easy to modify)
+│   └── main.jsx               # React entry point
+├── .env                       # YOUR SUPABASE CREDENTIALS (don't commit!)
+├── .env.example               # Template for .env file
+├── package.json               # Dependencies
+├── vite.config.js            # Vite configuration
+└── index.html                # HTML entry point
 ```
 
-## How to Participate
+## Key Features Explained
 
-1. **Fork** this repository.
-2. **Clone** your fork.
-3. Inside the root directory, create a new folder with your **team name**: `/Your-Team-Name/`
+### Login Attempt Limits
 
-4. Place **all your code, assets, and documentation** inside this folder.
-5. Push to your fork.
-6. Submit your forked repository link as instructed by the event guidelines.
+- Users have **3 attempts** to login
+- After 3 failed attempts, login is disabled
+- Attempts reset on successful login
+- Clear feedback on remaining attempts
 
-## Guidelines & Best Practices
+### Protected Routes
 
-- Your project **must be original** and created during Repogenesis.
-- Use any technologies you prefer — full freedom!
-- Maintain a clean folder structure.
-- Add a `README` inside your team folder describing:
-  - Your idea
-  - Features
-  - Tech stack
-  - Setup instructions
+The `/dashboard` route is protected and only accessible to authenticated users. Unauthenticated users are automatically redirected to `/login`.
 
-## Resources
+### Easy-to-Modify UI
 
-Check the `docs/` folder for:
+All styles are in `src/App.css` with:
+- Simple, semantic class names
+- Clear section comments
+- No complex CSS frameworks
+- Easy to replace entirely
 
-- Idea prompts
-- Public APIs
-- Recommended tools
-- Example architectures
+To change the UI:
+1. Modify classes in `App.css`, OR
+2. Replace `App.css` with your own styles, OR
+3. Add a CSS framework like Tailwind/Bootstrap
 
-## Goal
+## Customization
 
-This repository exists to give you starting clarity without limiting your creativity.  
-Build anything you want — surprise us!
+### Change Max Login Attempts
 
-Happy Hacking!
+In `src/components/Login.jsx`, change:
+```javascript
+const maxAttempts = 3  // Change to your desired number
+```
+
+### Modify Password Requirements
+
+In `src/components/Register.jsx`, adjust the validation:
+```javascript
+if (password.length < 6) {  // Change minimum length
+  setError('Password must be at least 6 characters long')
+  return
+}
+```
+
+### Change Styling
+
+Edit `src/App.css` - all styles are organized by section with clear comments.
+
+## Troubleshooting
+
+### "Missing Supabase environment variables"
+
+- Make sure you created the `.env` file
+- Check that the variable names start with `VITE_`
+- Restart the dev server after changing `.env`
+
+### Email confirmation required
+
+- Check your email for the confirmation link from Supabase
+- Or disable email confirmation in Supabase dashboard (Authentication → Settings)
+
+### Login not working
+
+- Check browser console for errors
+- Verify your Supabase credentials in `.env`
+- Make sure the user is registered and confirmed
+
+## Security Notes
+
+- Never commit your `.env` file to version control
+- The `.env` file is already in `.gitignore`
+- The anon key is safe to use in the frontend (it's public by design)
+- Supabase handles all security through Row Level Security (RLS) policies
+
+## Next Steps
+
+- Set up Row Level Security (RLS) policies in Supabase
+- Add password reset functionality
+- Implement social authentication (Google, GitHub, etc.)
+- Add user profile management
+- Customize the email templates in Supabase
+
+## Support
+
+For Supabase documentation: [https://supabase.com/docs](https://supabase.com/docs)
