@@ -1,0 +1,14 @@
+HOLOCRYPT LOGO SETUP
+====================
+
+Save the HoloCrypt logo image (the second attached image with the shield and lock) as:
+holocrypt-logo.png
+
+Place it in this folder (public/).
+
+The logo will automatically appear in the top-left corner of the landing page.
+
+Recommended logo specifications:
+- Format: PNG with transparent background
+- Size: 200-400px width (will auto-scale to 60px height)
+- Aspect ratio: Maintain original proportions

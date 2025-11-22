@@ -1,0 +1,211 @@
+/* 
+  ============================================
+  MINIMAL BASIC UI - NO COLORS/DESIGN
+  ============================================
+  Super easy to modify later!
+  Just change values below or replace entire file
+  ============================================
+*/
+
+/* === GLOBAL RESET === */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  line-height: 1.5;
+}
+
+.app {
+  min-height: 100vh;
+}
+
+/* === AUTH PAGES (Login/Register) === */
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.auth-card {
+  border: 1px solid #000;
+  padding: 40px;
+  width: 100%;
+  max-width: 400px;
+}
+
+.auth-title {
+  font-size: 24px;
+  margin-bottom: 30px;
+  font-weight: bold;
+}
+
+/* === FORM ELEMENTS === */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.form-label {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.form-input {
+  padding: 10px;
+  border: 1px solid #000;
+  font-size: 16px;
+}
+
+.form-input:focus {
+  outline: 2px solid #000;
+}
+
+.form-input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* === BUTTONS === */
+.btn-primary {
+  background-color: #000;
+  color: #fff;
+  border: 2px solid #000;
+  padding: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: #fff;
+  color: #000;
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  background-color: #000;
+  color: #fff;
+  border: 2px solid #000;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-secondary:hover {
+  background-color: #fff;
+  color: #000;
+}
+
+.link-button {
+  background: none;
+  border: none;
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: inherit;
+  padding: 0;
+}
+
+.link-button:hover:not(:disabled) {
+  font-weight: bold;
+}
+
+.link-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* === MESSAGES === */
+.error-message {
+  border: 2px solid #000;
+  padding: 12px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.success-message {
+  border: 2px solid #000;
+  padding: 12px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.info-message {
+  border: 1px solid #000;
+  padding: 12px;
+  font-size: 14px;
+}
+
+/* === AUTH FOOTER === */
+.auth-footer {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+/* === DASHBOARD === */
+.dashboard-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.dashboard-card {
+  border: 1px solid #000;
+  padding: 40px;
+  width: 100%;
+  max-width: 600px;
+}
+
+.dashboard-title {
+  font-size: 28px;
+  margin-bottom: 30px;
+  font-weight: bold;
+}
+
+.user-info {
+  border: 1px solid #000;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.user-info p {
+  margin: 10px 0;
+  font-size: 14px;
+  word-break: break-all;
+}
+
+.dashboard-content {
+  margin-top: 30px;
+}
+
+.dashboard-content p {
+  margin: 10px 0;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 480px) {
+  .auth-card,
+  .dashboard-card {
+    padding: 20px;
+  }
+}

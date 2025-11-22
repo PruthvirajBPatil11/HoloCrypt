@@ -192,3 +192,4 @@ Edit `src/App.css` - all styles are organized by section with clear comments.
 ## Support
 
 For Supabase documentation: [https://supabase.com/docs](https://supabase.com/docs)
+  
