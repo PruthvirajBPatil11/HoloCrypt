@@ -1,0 +1,16 @@
+Flask>=3.0.0
+Flask-CORS>=4.0.0
+streamlit>=1.28.0
+cryptography>=41.0.0
+qrcode[pil]>=7.4.0
+Pillow>=10.0.0
+numpy>=1.24.0
+nltk>=3.8.0
+python-dotenv>=1.0.0
+requests>=2.31.0
+reportlab>=4.0.0
+supabase>=2.0.0
+pypdf>=3.17.0
+twilio>=8.0.0
+resend>=0.7.0
+gunicorn>=21.0.0

@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HoloCrypt API Documentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        .content {
+            padding: 40px;
+        }
+        .section {
+            margin-bottom: 40px;
+        }
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+        .endpoint {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        .endpoint h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .method {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 5px;
+            font-weight: bold;
+            margin-right: 10px;
+            font-size: 0.9rem;
+        }
+        .method.post {
+            background: #28a745;
+            color: white;
+        }
+        .method.get {
+            background: #17a2b8;
+            color: white;
+        }
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+        .nav {
+            background: #f8f9fa;
+            padding: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+        .nav a {
+            color: #667eea;
+            text-decoration: none;
+            margin-right: 20px;
+            font-weight: 500;
+        }
+        .nav a:hover {
+            text-decoration: underline;
+        }
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            background: #ffc107;
+            color: #333;
+            border-radius: 3px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        table th, table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        table th {
+            background: #667eea;
+            color: white;
+        }
+        .footer {
+            background: #2d2d2d;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔐 HoloCrypt API</h1>
+            <p>Multi-Layer Encryption REST API Documentation</p>
+        </div>
+
+        <div class="nav">
+            <a href="/">🏠 Home</a>
+            <a href="/encrypt">🔒 Encrypt</a>
+            <a href="/decrypt">🔓 Decrypt</a>
+            <a href="/api/v1/health">💚 Health Check</a>
+        </div>
+
+        <div class="content">
+            <!-- Overview -->
+            <div class="section">
+                <h2>📖 Overview</h2>
+                <p>The HoloCrypt API provides endpoints for encrypting and decrypting messages using multiple cipher algorithms, sending encrypted emails with QR codes, and SMS notifications.</p>
+                <br>
+                <p><strong>Base URL:</strong> <code>http://localhost:5000/api/v1</code></p>
+                <p><strong>Content-Type:</strong> <code>application/json</code></p>
+            </div>
+
+            <!-- Authentication -->
+            <div class="section">
+                <h2>🔑 Authentication</h2>
+                <p>Currently, the API is open for testing. In production, you should implement API key authentication.</p>
+            </div>
+
+            <!-- Endpoints -->
+            <div class="section">
+                <h2>🛠️ API Endpoints</h2>
+
+                <!-- Health Check -->
+                <div class="endpoint">
+                    <h3><span class="method get">GET</span> /api/v1/health</h3>
+                    <p>Check API health status</p>
+                    <div class="code-block">
+curl http://localhost:5000/api/v1/health</div>
+                    <p><strong>Response:</strong></p>
+                    <div class="code-block">
+{
+  "status": "healthy",
+  "service": "HoloCrypt API",
+  "version": "1.0.0"
+}</div>
+                </div>
+
+                <!-- Encrypt -->
+                <div class="endpoint">
+                    <h3><span class="method post">POST</span> /api/v1/encrypt</h3>
+                    <p>Encrypt a message using specified cipher</p>
+                    <p><strong>Request Body:</strong></p>
+                    <div class="code-block">
+{
+  "message": "Your secret message",
+  "cipher_type": "caesar",
+  "cipher_params": {"shift": 5}
+}</div>
+                    <p><strong>cURL Example:</strong></p>
+                    <div class="code-block">
+curl -X POST http://localhost:5000/api/v1/encrypt \
+  -H "Content-Type: application/json" \
+  -d '{
+    "message": "Hello World",
+    "cipher_type": "caesar",
+    "cipher_params": {"shift": 5}
+  }'</div>
+                    <p><strong>Response:</strong></p>
+                    <div class="code-block">
+{
+  "success": true,
+  "encrypted_text": "Mjqqt Btwqi",
+  "cipher_type": "caesar",
+  "cipher_params": {"shift": 5},
+  "original_length": 11,
+  "encrypted_length": 11
+}</div>
+                </div>
+
+                <!-- Decrypt -->
+                <div class="endpoint">
+                    <h3><span class="method post">POST</span> /api/v1/decrypt</h3>
+                    <p>Decrypt an encrypted message</p>
+                    <p><strong>Request Body:</strong></p>
+                    <div class="code-block">
+{
+  "encrypted_text": "Mjqqt Btwqi",
+  "cipher_type": "caesar",
+  "cipher_params": {"shift": 5}
+}</div>
+                    <p><strong>Response:</strong></p>
+                    <div class="code-block">
+{
+  "success": true,
+  "decrypted_text": "Hello World",
+  "cipher_type": "caesar",
+  "cipher_params": {"shift": 5}
+}</div>
+                </div>
+
+                <!-- Send Encrypted Email -->
+                <div class="endpoint">
+                    <h3><span class="method post">POST</span> /api/v1/send-encrypted-email <span class="badge">Premium</span></h3>
+                    <p>Encrypt message and send via email with password-protected PDF</p>
+                    <p><strong>Request Body:</strong></p>
+                    <div class="code-block">
+{
+  "message": "Your secret message",
+  "receiver_email": "punithns26@gmail.com",
+  "sender_name": "Alice",
+  "cipher_type": "caesar",
+  "cipher_params": {"shift": 5},
+  "pdf_password": "secret123",
+  "receiver_phone": "+1234567890",
+  "password_hint": "Your PDF password is: secret123"
+}</div>
+                    <p><strong>Response:</strong></p>
+                    <div class="code-block">
+{
+  "success": true,
+  "message": "Email sent successfully",
+  "encrypted_text": "Mjqqt Btwqi",
+  "email_status": {...},
+  "sms_status": {...}
+}</div>
+                </div>
+
+                <!-- Generate QR -->
+                <div class="endpoint">
+                    <h3><span class="method post">POST</span> /api/v1/generate-qr</h3>
+                    <p>Generate QR code for encrypted message</p>
+                    <p><strong>Request Body:</strong></p>
+                    <div class="code-block">
+{
+  "encrypted_text": "Mjqqt Btwqi",
+  "cipher_type": "caesar",
+  "cipher_params": {"shift": 5}
+}</div>
+                    <p><strong>Response:</strong> PNG image</p>
+                </div>
+
+                <!-- List Ciphers -->
+                <div class="endpoint">
+                    <h3><span class="method get">GET</span> /api/v1/ciphers</h3>
+                    <p>List all available cipher types and their parameters</p>
+                    <div class="code-block">
+curl http://localhost:5000/api/v1/ciphers</div>
+                    <p><strong>Response:</strong></p>
+                    <div class="code-block">
+{
+  "success": true,
+  "ciphers": [
+    {
+      "type": "caesar",
+      "name": "Caesar Cipher",
+      "description": "Shifts each letter by a fixed number",
+      "params": {...},
+      "example": {...}
+    },
+    ...
+  ],
+  "total": 5
+}</div>
+                </div>
+            </div>
+
+            <!-- Cipher Types -->
+            <div class="section">
+                <h2>🔤 Supported Cipher Types</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Cipher Type</th>
+                            <th>Parameters</th>
+                            <th>Example</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>caesar</strong></td>
+                            <td>shift (1-25)</td>
+                            <td>HELLO → MJQQT (shift=5)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>vigenere</strong></td>
+                            <td>keyword (string)</td>
+                            <td>HELLO → ZINCS (key=SECRET)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>atbash</strong></td>
+                            <td>None</td>
+                            <td>HELLO → SVOOL</td>
+                        </tr>
+                        <tr>
+                            <td><strong>rail_fence</strong></td>
+                            <td>rails (2-10)</td>
+                            <td>HELLO → HOELL (rails=3)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>substitution</strong></td>
+                            <td>substitution_key (26 chars)</td>
+                            <td>Custom mapping</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Error Codes -->
+            <div class="section">
+                <h2>⚠️ Error Codes</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Code</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>400</strong></td>
+                            <td>Bad Request - Missing or invalid parameters</td>
+                        </tr>
+                        <tr>
+                            <td><strong>404</strong></td>
+                            <td>Not Found - Endpoint doesn't exist</td>
+                        </tr>
+                        <tr>
+                            <td><strong>413</strong></td>
+                            <td>Payload Too Large - File exceeds 16MB</td>
+                        </tr>
+                        <tr>
+                            <td><strong>500</strong></td>
+                            <td>Internal Server Error</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Rate Limiting -->
+            <div class="section">
+                <h2>⏱️ Rate Limiting</h2>
+                <p>Currently no rate limiting is implemented. In production, consider implementing rate limiting to prevent abuse.</p>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>🔐 HoloCrypt API v1.0.0 | Built with Flask & Python</p>
+            <p style="margin-top: 10px; opacity: 0.7;">Secure Multi-Layer Encryption System</p>
+        </div>
+    </div>
+</body>
+</html>

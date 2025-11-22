@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error - HoloCrypt</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            width: 100%;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .error-icon {
+            font-size: 5em;
+            margin-bottom: 20px;
+        }
+        
+        h1 {
+            color: #dc3545;
+            margin-bottom: 20px;
+        }
+        
+        .error-message {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: left;
+            margin: 20px 0;
+        }
+        
+        .back-button {
+            background: #667eea;
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1em;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+            transition: all 0.3s;
+        }
+        
+        .back-button:hover {
+            background: #764ba2;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="error-icon">⚠️</div>
+        <h1>Oops! Something went wrong</h1>
+        
+        <div class="error-message">
+            <h3>Error Details:</h3>
+            <p>{{ error }}</p>
+        </div>
+        
+        <p>Please check your QR code and try again, or contact the sender if the problem persists.</p>
+        
+        <a href="/" class="back-button">🏠 Back to Home</a>
+    </div>
+</body>
+</html>

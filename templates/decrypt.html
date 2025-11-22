@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Decrypt Message - HoloCrypt</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .info-box {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        
+        .encrypted-text {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            word-wrap: break-word;
+            margin: 20px 0;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .form-group {
+            margin: 20px 0;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .decrypt-button {
+            background: #667eea;
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2em;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+            transition: all 0.3s;
+        }
+        
+        .decrypt-button:hover {
+            background: #764ba2;
+            transform: scale(1.02);
+        }
+        
+        .decrypt-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .result-box {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 10px;
+            display: none;
+        }
+        
+        .result-box.success {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            display: block;
+        }
+        
+        .result-box.error {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+            display: block;
+        }
+        
+        .result-box h3 {
+            margin-bottom: 15px;
+        }
+        
+        .result-text {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            word-wrap: break-word;
+            white-space: pre-wrap;
+        }
+        
+        .loading {
+            text-align: center;
+            display: none;
+        }
+        
+        .loading.active {
+            display: block;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .cipher-params {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        
+        .cipher-params h4 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔐 Decrypt Your Message</h1>
+            <p>Enter the correct cipher to reveal your encrypted message</p>
+        </div>
+        
+        <div class="info-box">
+            <h3>📜 Encrypted Message</h3>
+            <div class="encrypted-text" id="encryptedText">{{ encrypted_data }}</div>
+        </div>
+        
+        <div class="cipher-params">
+            <h4>🔑 Cipher Information (Hint)</h4>
+            <p><strong>Cipher Type:</strong> <span id="actualCipher">{{ cipher_type }}</span></p>
+            <div id="actualParams">
+                {% for key, value in cipher_params.items() %}
+                <p><strong>{{ key }}:</strong> {{ value }}</p>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <form id="decryptForm">
+            <div class="form-group">
+                <label for="cipherType">Select Cipher Type:</label>
+                <select id="cipherType" name="cipherType" required>
+                    <option value="">-- Choose Cipher --</option>
+                    <option value="caesar">Caesar Cipher</option>
+                    <option value="vigenere">Vigenere Cipher</option>
+                    <option value="atbash">Atbash Cipher</option>
+                    <option value="rail_fence">Rail Fence Cipher</option>
+                    <option value="substitution">Substitution Cipher</option>
+                </select>
+            </div>
+            
+            <div class="form-group" id="caesarParams" style="display: none;">
+                <label for="shift">Shift Value:</label>
+                <input type="number" id="shift" name="shift" min="1" max="25" placeholder="e.g., 3">
+            </div>
+            
+            <div class="form-group" id="vigenereParams" style="display: none;">
+                <label for="keyword">Keyword:</label>
+                <input type="text" id="keyword" name="keyword" placeholder="e.g., SECRET">
+            </div>
+            
+            <div class="form-group" id="railsParams" style="display: none;">
+                <label for="rails">Number of Rails:</label>
+                <input type="number" id="rails" name="rails" min="2" max="10" placeholder="e.g., 3">
+            </div>
+            
+            <div class="form-group" id="substitutionParams" style="display: none;">
+                <label for="substitutionKey">Substitution Key (26 chars):</label>
+                <input type="text" id="substitutionKey" name="substitutionKey" 
+                       placeholder="QWERTYUIOPASDFGHJKLZXCVBNM" maxlength="26">
+            </div>
+            
+            <button type="submit" class="decrypt-button">🔓 Decrypt Message</button>
+        </form>
+        
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Decrypting...</p>
+        </div>
+        
+        <div class="result-box" id="resultBox">
+            <h3 id="resultTitle"></h3>
+            <p id="resultMessage"></p>
+            <div class="result-text" id="resultText"></div>
+        </div>
+    </div>
+    
+    <script>
+        // Store actual cipher data
+        const actualCipher = "{{ cipher_type }}";
+        const actualParams = {{ cipher_params | tojson }};
+        const encryptedData = "{{ encrypted_data }}";
+        
+        // Show/hide cipher parameter fields
+        document.getElementById('cipherType').addEventListener('change', function() {
+            const selectedCipher = this.value;
+            
+            // Hide all parameter fields
+            document.getElementById('caesarParams').style.display = 'none';
+            document.getElementById('vigenereParams').style.display = 'none';
+            document.getElementById('railsParams').style.display = 'none';
+            document.getElementById('substitutionParams').style.display = 'none';
+            
+            // Show relevant parameter field
+            if (selectedCipher === 'caesar') {
+                document.getElementById('caesarParams').style.display = 'block';
+            } else if (selectedCipher === 'vigenere') {
+                document.getElementById('vigenereParams').style.display = 'block';
+            } else if (selectedCipher === 'rail_fence') {
+                document.getElementById('railsParams').style.display = 'block';
+            } else if (selectedCipher === 'substitution') {
+                document.getElementById('substitutionParams').style.display = 'block';
+            }
+        });
+        
+        // Handle form submission
+        document.getElementById('decryptForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const providedCipher = document.getElementById('cipherType').value;
+            let providedParams = {};
+            
+            // Gather parameters based on cipher type
+            if (providedCipher === 'caesar') {
+                providedParams = { shift: parseInt(document.getElementById('shift').value) };
+            } else if (providedCipher === 'vigenere') {
+                providedParams = { keyword: document.getElementById('keyword').value };
+            } else if (providedCipher === 'rail_fence') {
+                providedParams = { rails: parseInt(document.getElementById('rails').value) };
+            } else if (providedCipher === 'substitution') {
+                providedParams = { substitution_key: document.getElementById('substitutionKey').value };
+            }
+            
+            // Show loading
+            document.getElementById('loading').classList.add('active');
+            document.getElementById('resultBox').style.display = 'none';
+            
+            try {
+                const response = await fetch('/decrypt', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        encrypted_data: encryptedData,
+                        provided_cipher: providedCipher,
+                        provided_params: providedParams,
+                        actual_cipher: actualCipher,
+                        actual_params: actualParams
+                    })
+                });
+                
+                const result = await response.json();
+                
+                // Hide loading
+                document.getElementById('loading').classList.remove('active');
+                
+                // Show result
+                const resultBox = document.getElementById('resultBox');
+                resultBox.className = 'result-box ' + (result.correct ? 'success' : 'error');
+                
+                document.getElementById('resultTitle').textContent = 
+                    result.correct ? '✅ Decryption Successful!' : '❌ Wrong Cipher Detected';
+                document.getElementById('resultMessage').textContent = result.message;
+                document.getElementById('resultText').textContent = result.result;
+                
+            } catch (error) {
+                document.getElementById('loading').classList.remove('active');
+                
+                const resultBox = document.getElementById('resultBox');
+                resultBox.className = 'result-box error';
+                document.getElementById('resultTitle').textContent = '❌ Error';
+                document.getElementById('resultMessage').textContent = 'Failed to decrypt: ' + error.message;
+                document.getElementById('resultText').textContent = '';
+            }
+        });
+    </script>
+</body>
+</html>
